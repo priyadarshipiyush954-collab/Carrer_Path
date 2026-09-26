@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import { jobMarketData } from './data/initialData';
-import { JobMarketData, CareerPath } from './types/jobMarket';
+import { JobMarketData } from './types/jobMarket';
 import { Header } from './components/Header';
 import { CareerPathsView } from './components/CareerPathsView';
 import { SkillMatcher } from './components/SkillMatcher';
 import { SkillsMatrixView } from './components/SkillsMatrixView';
 import { SalaryBenchmarksView } from './components/SalaryBenchmarksView';
-import { RawDataViewer } from './components/RawDataViewer';
 import { CareerCompareModal } from './components/CareerCompareModal';
-import { Briefcase, CheckCircle2, Sparkles, Terminal } from 'lucide-react';
 
 export const App: React.FC = () => {
-  const [data, setData] = useState<JobMarketData>(jobMarketData);
+  const [data] = useState<JobMarketData>(jobMarketData);
   const [activeTab, setActiveTab] = useState<string>('careers');
   const [selectedForCompare, setSelectedForCompare] = useState<string[]>([
     'Data Scientist',
@@ -25,21 +23,6 @@ export const App: React.FC = () => {
         ? prev.filter((r) => r !== roleName)
         : [...prev, roleName]
     );
-  };
-
-  const handleAddCareerPath = (roleName: string, path: CareerPath) => {
-    setData((prev) => {
-      const updatedRequired = Array.from(
-        new Set([...prev.required_skills, ...path.required_skills])
-      );
-      return {
-        required_skills: updatedRequired,
-        career_paths: {
-          ...prev.career_paths,
-          [roleName]: path,
-        },
-      };
-    });
   };
 
   return (
@@ -89,13 +72,6 @@ export const App: React.FC = () => {
         {activeTab === 'benchmarks' && (
           <SalaryBenchmarksView careerPaths={data.career_paths} />
         )}
-
-        {activeTab === 'data' && (
-          <RawDataViewer
-            data={data}
-            onAddCareerPath={handleAddCareerPath}
-          />
-        )}
       </main>
 
       {/* Comparison Modal */}
@@ -118,19 +94,11 @@ export const App: React.FC = () => {
               Tech Career & Job Market Explorer
             </span>
             <span>•</span>
-            <span className="text-slate-600">Hackathon 3.0 Dataset</span>
-            <span className="flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 text-[11px] font-semibold">
-              <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-              Verified Schema
-            </span>
+            <span className="text-slate-500">Tech Career Intelligence & Skill Gap Explorer</span>
           </div>
 
           <div className="flex items-center gap-3 text-slate-500 text-center sm:text-right">
-            <span className="inline-flex items-center gap-1 text-indigo-700 font-medium bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">
-              <Terminal className="w-3 h-3" />
-              Python Engine: python_app/
-            </span>
-            <span>Data source: <code className="text-slate-700 font-mono font-medium">job_market_data.json</code></span>
+            <span>Career trajectory analysis & predictive compensation benchmarks</span>
           </div>
         </div>
       </footer>

@@ -22,7 +22,7 @@ export const SalaryBenchmarksView: React.FC<SalaryBenchmarksViewProps> = ({
           <span>Compensation & Growth Trajectory Benchmarks</span>
         </h2>
         <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-3xl leading-relaxed">
-          Comparative earnings potential and trajectory analysis derived from the verified Hackathon 3.0
+          Comparative earnings potential and trajectory analysis derived from verified tech
           job market data across entry levels through senior compensation brackets.
         </p>
       </div>

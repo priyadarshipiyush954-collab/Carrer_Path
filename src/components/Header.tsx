@@ -1,5 +1,5 @@
 import React from 'react';
-import { Briefcase, CheckCircle2, Sparkles, Terminal } from 'lucide-react';
+import { Briefcase, CheckCircle2 } from 'lucide-react';
 
 interface HeaderProps {
   activeTab: string;
@@ -19,7 +19,6 @@ export const Header: React.FC<HeaderProps> = ({
     { id: 'matcher', label: 'Skill Gap Analyzer' },
     { id: 'skills', label: 'In-Demand Skills' },
     { id: 'benchmarks', label: 'Market Benchmarks' },
-    { id: 'data', label: 'Dataset & Schema' },
   ];
 
   return (
@@ -37,11 +36,11 @@ export const Header: React.FC<HeaderProps> = ({
                 </h1>
                 <span className="px-2.5 py-0.5 text-xs font-bold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/80 flex items-center gap-1 shadow-xs">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                  Aligned Dataset
+                  Verified Insights
                 </span>
               </div>
               <p className="text-xs text-slate-500 font-medium">
-                Hackathon 3.0 Market Intelligence • {careerCount} Career Paths • {skillCount} In-Demand Skills
+                Tech Career Intelligence • {careerCount} Career Paths • {skillCount} In-Demand Skills
               </p>
             </div>
           </div>
