@@ -1,0 +1,8 @@
+{
+  "name": "Tech Career & Job Market Explorer",
+  "description": "Interactive career path analyzer, skill match calculator, and tech job market insights based on verified industry skill data.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

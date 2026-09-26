@@ -1,11 +1,19 @@
-<div align="center">
+# Hackathon 3.0
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+This repository contains `job_market_data.json`, a simple dataset of in-demand skills and technology career paths.
 
-  <h1>Built with AI Studio</h2>
+## Data consistency fix
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+The `required_skills` master list has been aligned with the skills used in each role under `career_paths`.
+Missing items that were added:
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+- HTML/CSS
+- React
+- Node.js
+- Deep Learning
 
-</div>
+## Quick validation
+
+```bash
+python -m json.tool job_market_data.json > /dev/null
+```
