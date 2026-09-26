@@ -6,7 +6,7 @@
 FROM node:22-alpine AS web-builder
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
 COPY . .
 RUN npm run build
 
@@ -39,7 +39,7 @@ COPY run_analyzer.py ./
 COPY package*.json ./
 
 # Install npm production dependencies and copy built frontend
-RUN npm ci --omit=dev
+RUN if [ -f package-lock.json ]; then npm ci --omit=dev; else npm install --omit=dev; fi
 COPY --from=web-builder /app/dist ./dist
 
 # Create non-root user for security
