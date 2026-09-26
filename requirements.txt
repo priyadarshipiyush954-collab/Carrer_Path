@@ -1,0 +1,11 @@
+# Core application runs on Python 3.8+ standard library (zero external dependencies required)
+
+# Optional extras for enhanced development, formatting, and testing
+pytest>=8.0.0
+pytest-cov>=4.1.0
+flake8>=7.0.0
+black>=24.0.0
+
+# Optional ASGI server / framework if deploying as FastAPI
+fastapi>=0.110.0
+uvicorn>=0.28.0

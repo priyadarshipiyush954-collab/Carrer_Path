@@ -1,0 +1,40 @@
+services:
+  # Primary Web & Interactive Explorer
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: job-market-explorer
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    volumes:
+      - ./job_market_data.json:/app/job_market_data.json:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # Python Microservice / REST API & CLI
+  python-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: job-market-python-api
+    command: ["python3", "python_app/server.py", "--port", "8000"]
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./job_market_data.json:/app/job_market_data.json:ro
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

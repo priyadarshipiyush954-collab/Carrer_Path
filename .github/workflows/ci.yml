@@ -1,0 +1,88 @@
+name: CI Workflow
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  python-tests:
+    name: Python Tests & Validation
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Validate dataset JSON syntax
+        run: |
+          python -m json.tool job_market_data.json > /dev/null
+
+      - name: Run Python unit tests
+        run: |
+          python -m unittest discover tests
+
+      - name: Test Python CLI commands
+        run: |
+          python python_app/cli.py validate
+          python python_app/cli.py stats
+          python python_app/cli.py list
+          python python_app/cli.py match --skills "Python,SQL,Machine Learning"
+
+  web-tests:
+    name: Frontend Build & Type Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run type check & lint
+        run: npm run lint
+
+      - name: Build web production bundle
+        run: npm run build
+
+  docker-build:
+    name: Docker Container Build
+    needs: [python-tests, web-tests]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: tech-career-market-explorer:latest
