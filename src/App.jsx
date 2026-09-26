@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { jobMarketData } from './data/initialData';
-import { JobMarketData } from './types/jobMarket';
 import { Header } from './components/Header';
 import { CareerPathsView } from './components/CareerPathsView';
 import { SkillMatcher } from './components/SkillMatcher';
@@ -8,16 +7,16 @@ import { SkillsMatrixView } from './components/SkillsMatrixView';
 import { SalaryBenchmarksView } from './components/SalaryBenchmarksView';
 import { CareerCompareModal } from './components/CareerCompareModal';
 
-export const App: React.FC = () => {
-  const [data] = useState<JobMarketData>(jobMarketData);
-  const [activeTab, setActiveTab] = useState<string>('careers');
-  const [selectedForCompare, setSelectedForCompare] = useState<string[]>([
+export const App = () => {
+  const [data] = useState(jobMarketData);
+  const [activeTab, setActiveTab] = useState('careers');
+  const [selectedForCompare, setSelectedForCompare] = useState([
     'Data Scientist',
     'AI Engineer',
   ]);
-  const [isCompareModalOpen, setIsCompareModalOpen] = useState<boolean>(false);
+  const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
 
-  const toggleCompare = (roleName: string) => {
+  const toggleCompare = (roleName) => {
     setSelectedForCompare((prev) =>
       prev.includes(roleName)
         ? prev.filter((r) => r !== roleName)
@@ -39,8 +38,8 @@ export const App: React.FC = () => {
       <Header
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        careerCount={Object.keys(data.career_paths).length}
-        skillCount={data.required_skills.length}
+        careerCount={Object.keys(data.career_paths || {}).length}
+        skillCount={(data.required_skills || []).length}
       />
 
       {/* Main Container */}

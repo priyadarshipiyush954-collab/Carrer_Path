@@ -1,16 +1,11 @@
 import React from 'react';
-import { CareerPath } from '../types/jobMarket';
 import { parseSalary } from '../data/initialData';
-import { DollarSign, TrendingUp, GraduationCap, BarChart3, Award } from 'lucide-react';
+import { DollarSign, TrendingUp, GraduationCap, BarChart3 } from 'lucide-react';
 
-interface SalaryBenchmarksViewProps {
-  careerPaths: Record<string, CareerPath>;
-}
-
-export const SalaryBenchmarksView: React.FC<SalaryBenchmarksViewProps> = ({
+export const SalaryBenchmarksView = ({
   careerPaths,
 }) => {
-  const roleEntries = Object.entries(careerPaths);
+  const roleEntries = Object.entries(careerPaths || {});
   const maxBenchmark = 180000;
 
   return (

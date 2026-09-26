@@ -1,9 +1,8 @@
 import rawData from '../../job_market_data.json';
-import { JobMarketData, CategorizedSkill, SkillCategory } from '../types/jobMarket';
 
-export const jobMarketData: JobMarketData = rawData as JobMarketData;
+export const jobMarketData = rawData;
 
-export const SKILL_CATEGORIES: Record<string, SkillCategory> = {
+export const SKILL_CATEGORIES = {
   'Python': 'Languages & Web',
   'JavaScript': 'Languages & Web',
   'HTML/CSS': 'Languages & Web',
@@ -24,12 +23,11 @@ export const SKILL_CATEGORIES: Record<string, SkillCategory> = {
   'Teamwork': 'Soft Skills',
 };
 
-export const getSkillCategory = (skillName: string): SkillCategory => {
+export const getSkillCategory = (skillName) => {
   return SKILL_CATEGORIES[skillName] || 'Languages & Web';
 };
 
-export const parseSalary = (rangeStr: string): { min: number; max: number; average: number } => {
-  // Example: "$80,000 - $150,000"
+export const parseSalary = (rangeStr) => {
   const matches = rangeStr.replace(/[^0-9-]/g, '').split('-');
   const min = matches[0] ? parseInt(matches[0], 10) : 0;
   const max = matches[1] ? parseInt(matches[1], 10) : min;
@@ -40,7 +38,7 @@ export const parseSalary = (rangeStr: string): { min: number; max: number; avera
   };
 };
 
-export const getRoleSkillMatch = (roleSkills: string[], userSkills: string[]) => {
+export const getRoleSkillMatch = (roleSkills, userSkills) => {
   const matching = roleSkills.filter((s) => userSkills.includes(s));
   const missing = roleSkills.filter((s) => !userSkills.includes(s));
   const percentage = roleSkills.length > 0 ? Math.round((matching.length / roleSkills.length) * 100) : 0;

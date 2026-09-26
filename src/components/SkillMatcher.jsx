@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { CareerPath } from '../types/jobMarket';
 import { getRoleSkillMatch, getSkillCategory } from '../data/initialData';
 import {
   CheckCircle,
@@ -12,28 +11,23 @@ import {
   Check,
 } from 'lucide-react';
 
-interface SkillMatcherProps {
-  careerPaths: Record<string, CareerPath>;
-  allRequiredSkills: string[];
-}
-
-export const SkillMatcher: React.FC<SkillMatcherProps> = ({
+export const SkillMatcher = ({
   careerPaths,
   allRequiredSkills,
 }) => {
-  const [userSkills, setUserSkills] = useState<string[]>([
+  const [userSkills, setUserSkills] = useState([
     'Python',
     'SQL',
     'Communication',
   ]);
 
-  const toggleSkill = (skill: string) => {
+  const toggleSkill = (skill) => {
     setUserSkills((prev) =>
       prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill]
     );
   };
 
-  const handlePreset = (presetName: string) => {
+  const handlePreset = (presetName) => {
     switch (presetName) {
       case 'web':
         setUserSkills(['JavaScript', 'HTML/CSS', 'React', 'Node.js', 'Problem Solving']);
@@ -56,7 +50,7 @@ export const SkillMatcher: React.FC<SkillMatcherProps> = ({
   };
 
   // Group all skills by category with customized colors
-  const categories: Record<string, { skills: string[]; bgBadge: string; textBadge: string; borderBadge: string }> = {
+  const categories = {
     'Languages & Web': {
       skills: [],
       bgBadge: 'bg-sky-50',
@@ -224,14 +218,14 @@ export const SkillMatcher: React.FC<SkillMatcherProps> = ({
             })
             .sort((a, b) => b.match.percentage - a.match.percentage)
             .map(({ roleName, pathDetails, match }) => {
-              const getScoreGradient = (pct: number) => {
+              const getScoreGradient = (pct) => {
                 if (pct === 100) return 'from-emerald-400 via-teal-400 to-green-500';
                 if (pct >= 50) return 'from-indigo-500 via-purple-500 to-pink-500';
                 if (pct > 0) return 'from-amber-400 via-orange-400 to-amber-500';
                 return 'from-slate-300 to-slate-400';
               };
 
-              const getStatusBadge = (pct: number) => {
+              const getStatusBadge = (pct) => {
                 if (pct === 100) {
                   return {
                     label: 'Ready to Apply / 100% Match',

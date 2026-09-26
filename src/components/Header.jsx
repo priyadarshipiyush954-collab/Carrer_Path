@@ -1,14 +1,7 @@
 import React from 'react';
 import { Briefcase, CheckCircle2 } from 'lucide-react';
 
-interface HeaderProps {
-  activeTab: string;
-  setActiveTab: (tab: string) => void;
-  careerCount: number;
-  skillCount: number;
-}
-
-export const Header: React.FC<HeaderProps> = ({
+export const Header = ({
   activeTab,
   setActiveTab,
   careerCount,

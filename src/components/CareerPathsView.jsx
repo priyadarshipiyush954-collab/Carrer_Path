@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { CareerPath } from '../types/jobMarket';
 import { parseSalary } from '../data/initialData';
 import {
   TrendingUp,
@@ -15,25 +14,17 @@ import {
   ChevronUp,
 } from 'lucide-react';
 
-interface CareerPathsViewProps {
-  careerPaths: Record<string, CareerPath>;
-  allRequiredSkills: string[];
-  selectedForCompare: string[];
-  toggleCompare: (roleName: string) => void;
-  openCompareModal: () => void;
-}
-
-export const CareerPathsView: React.FC<CareerPathsViewProps> = ({
+export const CareerPathsView = ({
   careerPaths,
   selectedForCompare,
   toggleCompare,
   openCompareModal,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [growthFilter, setGrowthFilter] = useState<string>('ALL');
-  const [expandedRole, setExpandedRole] = useState<string | null>(null);
+  const [growthFilter, setGrowthFilter] = useState('ALL');
+  const [expandedRole, setExpandedRole] = useState(null);
 
-  const roleEntries = Object.entries(careerPaths);
+  const roleEntries = Object.entries(careerPaths || {});
 
   const filteredRoles = roleEntries.filter(([roleName, details]) => {
     const matchesSearch =
@@ -49,7 +40,7 @@ export const CareerPathsView: React.FC<CareerPathsViewProps> = ({
     return matchesSearch && matchesGrowth;
   });
 
-  const getGrowthBadge = (growth: string) => {
+  const getGrowthBadge = (growth) => {
     switch (growth) {
       case 'Very High':
         return 'bg-emerald-50 text-emerald-800 border-emerald-200 shadow-xs';
@@ -62,10 +53,7 @@ export const CareerPathsView: React.FC<CareerPathsViewProps> = ({
     }
   };
 
-  const roleOverviews: Record<
-    string,
-    { description: string; typicalDeliverables: string[]; careerTip: string; accentColor: string }
-  > = {
+  const roleOverviews = {
     'Data Scientist': {
       description:
         'Analyzes massive datasets to extract actionable insights, build predictive models, and optimize strategic decisions across enterprise domains.',

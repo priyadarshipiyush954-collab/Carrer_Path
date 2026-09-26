@@ -1,18 +1,8 @@
 import React from 'react';
-import { CareerPath } from '../types/jobMarket';
 import { parseSalary } from '../data/initialData';
 import { X, Check, DollarSign, TrendingUp, GraduationCap, Layers } from 'lucide-react';
 
-interface CareerCompareModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  selectedRoles: string[];
-  careerPaths: Record<string, CareerPath>;
-  allRequiredSkills: string[];
-  onRemoveRole: (role: string) => void;
-}
-
-export const CareerCompareModal: React.FC<CareerCompareModalProps> = ({
+export const CareerCompareModal = ({
   isOpen,
   onClose,
   selectedRoles,

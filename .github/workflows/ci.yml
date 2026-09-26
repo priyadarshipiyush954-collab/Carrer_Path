@@ -49,7 +49,7 @@ jobs:
           python python_app/cli.py export --skills "Python,SQL" --format md
 
   web-tests:
-    name: Frontend Build & Type Check
+    name: Frontend Build & Validation
     runs-on: ubuntu-latest
 
     steps:
@@ -69,7 +69,7 @@ jobs:
             npm install
           fi
 
-      - name: Run type check & lint
+      - name: Run frontend validation
         run: npm run lint
 
       - name: Build web production bundle

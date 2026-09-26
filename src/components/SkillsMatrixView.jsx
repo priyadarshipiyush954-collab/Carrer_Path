@@ -1,33 +1,27 @@
 import React, { useState } from 'react';
-import { CareerPath } from '../types/jobMarket';
 import { getSkillCategory } from '../data/initialData';
 import { Search, Layers, Briefcase, Filter, Sparkles } from 'lucide-react';
 
-interface SkillsMatrixViewProps {
-  allRequiredSkills: string[];
-  careerPaths: Record<string, CareerPath>;
-}
-
-export const SkillsMatrixView: React.FC<SkillsMatrixViewProps> = ({
+export const SkillsMatrixView = ({
   allRequiredSkills,
   careerPaths,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
+  const [selectedCategory, setSelectedCategory] = useState('ALL');
 
   const categories = ['ALL', 'Languages & Web', 'AI & Data Science', 'Cloud & Systems', 'Soft Skills'];
 
-  const categoryBadgeStyles: Record<string, { bg: string; text: string; border: string }> = {
+  const categoryBadgeStyles = {
     'Languages & Web': { bg: 'bg-sky-50', text: 'text-sky-700', border: 'border-sky-200' },
     'AI & Data Science': { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200' },
     'Cloud & Systems': { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' },
     'Soft Skills': { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200' },
   };
 
-  const skillUsageMap: Record<string, string[]> = {};
+  const skillUsageMap = {};
   allRequiredSkills.forEach((skill) => {
     skillUsageMap[skill] = [];
-    Object.entries(careerPaths).forEach(([roleName, pathDetails]) => {
+    Object.entries(careerPaths || {}).forEach(([roleName, pathDetails]) => {
       if (pathDetails.required_skills.includes(skill)) {
         skillUsageMap[skill].push(roleName);
       }
@@ -54,7 +48,7 @@ export const SkillsMatrixView: React.FC<SkillsMatrixViewProps> = ({
             {allRequiredSkills.length} Skills
           </span>
           <span className="text-[11px] text-slate-500 mt-1 block font-medium">
-            Master taxonomy from job_market_data.json
+            Core technical and professional competencies
           </span>
         </div>
 

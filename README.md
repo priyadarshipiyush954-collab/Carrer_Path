@@ -1,13 +1,13 @@
-# Tech Career & Job Market Explorer (Hackathon 3.0)
+# Tech Career & Job Market Explorer
 
 [![CI Workflow](https://img.shields.io/badge/CI-GitHub%20Actions-blue?logo=github-actions)](.github/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python)](python_app/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?logo=typescript)](src/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES2024-yellow?logo=javascript)](src/)
 [![React](https://img.shields.io/badge/React-19-61dafb?logo=react)](src/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ed?logo=docker)](Dockerfile)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-An end-to-end technology career intelligence platform and skill gap analyzer built with **Python as the central computing engine (~80% of project logic)** paired with a **colorful, light-themed React + TypeScript UI**. The project analyzes verified technology career paths, benchmarks salary distributions, maps cross-disciplinary in-demand skills, and calculates real-time candidate readiness scores.
+An end-to-end technology career intelligence platform and skill gap analyzer built with **Python as the central computing engine (~80% of project logic)** paired with a **colorful, light-themed modern JavaScript (React JSX) web UI**. The project analyzes verified technology career paths, benchmarks salary distributions, maps cross-disciplinary in-demand skills, and calculates real-time candidate readiness scores.
 
 ---
 
