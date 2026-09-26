@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 """
-Lightweight REST API and Dashboard server using Python standard library.
-Zero third-party dependencies required.
-Run:
-    python python_app/server.py --port 8000
+Python Job Market REST API and Microservice.
+Built entirely with the Python Standard Library (zero third-party requirements).
 """
 
 import sys
@@ -15,6 +13,7 @@ from urllib.parse import urlparse, parse_qs
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from python_app.analyzer import JobMarketAnalyzer
+from python_app.exporter import ReportExporter
 
 analyzer = JobMarketAnalyzer()
 
@@ -40,34 +39,45 @@ class JobMarketHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         parsed = urlparse(self.path)
         path = parsed.path.rstrip('/')
+        query = parse_qs(parsed.query)
 
         if path == "" or path == "/":
-            # Serve a clean HTML status page
             html = f"""<!DOCTYPE html>
 <html>
 <head>
-  <title>Python Job Market API</title>
+  <meta charset="utf-8">
+  <title>Python Job Market Engine & API</title>
   <style>
-    body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; max-width: 800px; margin: auto; }}
-    h1 {{ color: #818cf8; }}
-    .badge {{ display: inline-block; padding: 0.25rem 0.75rem; border-radius: 9999px; background: #065f46; color: #34d399; font-weight: bold; font-size: 0.8rem; }}
-    pre {{ background: #1e293b; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; color: #38bdf8; }}
-    a {{ color: #38bdf8; text-decoration: none; }}
+    body {{ font-family: system-ui, sans-serif; background: #faf5ff; color: #1e1b4b; padding: 2rem; max-width: 850px; margin: auto; }}
+    h1 {{ color: #4338ca; }}
+    .badge {{ display: inline-block; padding: 0.25rem 0.75rem; border-radius: 9999px; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-weight: bold; font-size: 0.8rem; }}
+    .card {{ background: #ffffff; border: 1px solid #e0e7ff; border-radius: 1rem; padding: 1.5rem; margin-top: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }}
+    a {{ color: #6366f1; text-decoration: none; font-weight: 500; }}
     a:hover {{ text-decoration: underline; }}
-    ul {{ line-height: 1.8; }}
+    ul {{ line-height: 2; }}
+    code {{ background: #f1f5f9; padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-family: monospace; }}
   </style>
 </head>
 <body>
-  <h1>Job Market Explorer API <span class="badge">Active</span></h1>
-  <p>Python Standard Library REST API powering career path analysis and skill gap calculations.</p>
-  <h3>Available Endpoints</h3>
-  <ul>
-    <li><a href="/api/health">/api/health</a> - Service health check</li>
-    <li><a href="/api/careers">/api/careers</a> - All technology career paths</li>
-    <li><a href="/api/skills">/api/skills</a> - Master required skills list</li>
-    <li><a href="/api/stats">/api/stats</a> - Market statistics & rankings</li>
-    <li><a href="/api/validate">/api/validate</a> - Dataset consistency validation</li>
-  </ul>
+  <h1>Job Market Python Microservice <span class="badge">Active</span></h1>
+  <p>Production Python service powering career analysis, candidate readiness matching, and skill gap forecasting.</p>
+  <div class="card">
+    <h3>Available REST Endpoints</h3>
+    <ul>
+      <li><a href="/api/health">/api/health</a> - Microservice health status</li>
+      <li><a href="/api/careers">/api/careers</a> - Complete career path data</li>
+      <li><a href="/api/skills">/api/skills</a> - Master required skills directory</li>
+      <li><a href="/api/stats">/api/stats</a> - Market statistics & growth momentum</li>
+      <li><a href="/api/leverage">/api/leverage</a> - Skill market leverage & cross-role utility</li>
+      <li><a href="/api/validate">/api/validate</a> - Dataset integrity & consistency verification</li>
+    </ul>
+    <h3>POST Endpoints</h3>
+    <ul>
+      <li><code>POST /api/match</code> with <code>{{"skills": ["Python", "SQL"]}}</code></li>
+      <li><code>POST /api/roadmap</code> with <code>{{"role": "Data Scientist", "skills": ["Python"]}}</code></li>
+      <li><code>POST /api/transfer</code> with <code>{{"source": "Web Developer", "target": "Data Scientist"}}</code></li>
+    </ul>
+  </div>
 </body>
 </html>"""
             response_bytes = html.encode('utf-8')
@@ -79,7 +89,7 @@ class JobMarketHandler(BaseHTTPRequestHandler):
             return
 
         if path == "/api/health":
-            self._send_json({"status": "healthy", "service": "JobMarketAnalyzer Python Engine"})
+            self._send_json({"status": "healthy", "service": "Python Job Market Microservice", "version": "1.0.0"})
             return
 
         if path == "/api/careers":
@@ -91,7 +101,14 @@ class JobMarketHandler(BaseHTTPRequestHandler):
             return
 
         if path == "/api/stats":
-            self._send_json(analyzer.get_market_statistics())
+            stats = analyzer.get_market_statistics()
+            growth = analyzer.get_forecaster().get_growth_momentum_summary()
+            self._send_json({**stats, "growth_momentum": growth})
+            return
+
+        if path == "/api/leverage":
+            rankings = analyzer.get_forecaster().get_skill_leverage_rankings()
+            self._send_json({"rankings": rankings})
             return
 
         if path == "/api/validate":
@@ -105,19 +122,43 @@ class JobMarketHandler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = parsed.path.rstrip('/')
 
+        content_length = int(self.headers.get('Content-Length', 0))
+        body = self.rfile.read(content_length)
+        try:
+            payload = json.loads(body.decode('utf-8')) if content_length > 0 else {}
+        except Exception as e:
+            self._send_json({"error": f"Invalid JSON payload: {str(e)}"}, 400)
+            return
+
         if path == "/api/match":
-            content_length = int(self.headers.get('Content-Length', 0))
-            body = self.rfile.read(content_length)
-            try:
-                payload = json.loads(body.decode('utf-8'))
-                skills = payload.get("skills", [])
-                if not isinstance(skills, list):
-                    self._send_json({"error": "'skills' must be an array of skill strings"}, 400)
-                    return
-                results = analyzer.calculate_skill_match(skills)
-                self._send_json({"user_skills": skills, "results": results})
-            except Exception as e:
-                self._send_json({"error": f"Failed to parse JSON body: {str(e)}"}, 400)
+            skills = payload.get("skills", [])
+            results = analyzer.calculate_skill_match(skills)
+            self._send_json({"user_skills": skills, "results": results})
+            return
+
+        if path == "/api/roadmap":
+            role = payload.get("role", "")
+            skills = payload.get("skills", [])
+            if role not in analyzer.career_paths:
+                self._send_json({"error": f"Role '{role}' not found"}, 404)
+                return
+            reports = analyzer.evaluate_candidate(skills)
+            target = next((r for r in reports if r.role == role), None)
+            if target:
+                self._send_json({
+                    "role": target.role,
+                    "match_percentage": target.match_percentage,
+                    "milestones": [m.__dict__ for m in target.milestones]
+                })
+            else:
+                self._send_json({"error": "Evaluation failed"}, 500)
+            return
+
+        if path == "/api/transfer":
+            source = payload.get("source", "")
+            target = payload.get("target", "")
+            res = analyzer.get_recommender().calculate_transferability(source, target)
+            self._send_json(res)
             return
 
         self._send_json({"error": "Endpoint not found"}, 404)
@@ -125,10 +166,7 @@ class JobMarketHandler(BaseHTTPRequestHandler):
 def run_server(port: int = 8000, host: str = "0.0.0.0"):
     server_address = (host, port)
     httpd = HTTPServer(server_address, JobMarketHandler)
-    print(f"🚀 Python Job Market API Server running at http://{host}:{port}/")
-    print(f"   Health check: http://{host}:{port}/api/health")
-    print(f"   Careers API:  http://{host}:{port}/api/careers")
-    print("Press Ctrl+C to stop.")
+    print(f"🚀 Python Job Market Engine running on http://{host}:{port}/")
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:

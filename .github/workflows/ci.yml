@@ -43,6 +43,10 @@ jobs:
           python python_app/cli.py stats
           python python_app/cli.py list
           python python_app/cli.py match --skills "Python,SQL,Machine Learning"
+          python python_app/cli.py roadmap --role "Data Scientist" --skills "Python,SQL"
+          python python_app/cli.py transfer "Data Scientist" "AI Engineer"
+          python python_app/cli.py leverage
+          python python_app/cli.py export --skills "Python,SQL" --format md
 
   web-tests:
     name: Frontend Build & Type Check

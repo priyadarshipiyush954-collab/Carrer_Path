@@ -3,6 +3,12 @@ import os
 import re
 from typing import Dict, List, Any, Optional, Tuple
 
+from .models import SalaryMetrics, CareerPathModel, CandidateReadinessReport
+from .recommender import CareerRecommender
+from .market_forecaster import MarketForecaster
+from .roadmap_generator import RoadmapGenerator
+from .exporter import ReportExporter
+
 class JobMarketAnalyzer:
     """
     Core Python engine for analyzing technology career paths,
@@ -201,3 +207,17 @@ class JobMarketAnalyzer:
 
         is_valid = len(errors) == 0
         return is_valid, errors
+
+    def get_recommender(self) -> CareerRecommender:
+        """Returns initialized CareerRecommender instance."""
+        return CareerRecommender(self.career_paths, self.required_skills)
+
+    def get_forecaster(self) -> MarketForecaster:
+        """Returns initialized MarketForecaster instance."""
+        return MarketForecaster(self.career_paths, self.required_skills)
+
+    def evaluate_candidate(self, user_skills: List[str]) -> List[CandidateReadinessReport]:
+        """Runs full candidate readiness evaluation including roadmaps."""
+        recommender = self.get_recommender()
+        return recommender.generate_comprehensive_evaluation(user_skills)
+

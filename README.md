@@ -7,7 +7,7 @@
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ed?logo=docker)](Dockerfile)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-An end-to-end technology career intelligence platform and skill gap analyzer built with **Python** and **React + TypeScript**. The project analyzes verified technology career paths, benchmarks salary distributions, maps cross-disciplinary in-demand skills, and calculates real-time candidate readiness scores.
+An end-to-end technology career intelligence platform and skill gap analyzer built with **Python as the central computing engine (~80% of project logic)** paired with a **colorful, light-themed React + TypeScript UI**. The project analyzes verified technology career paths, benchmarks salary distributions, maps cross-disciplinary in-demand skills, and calculates real-time candidate readiness scores.
 
 ---
 
@@ -26,13 +26,20 @@ In Hackathon 3.0, the `required_skills` master taxonomy was audited and strictly
 
 ## 🚀 Key Features
 
-- **Python Core Engine (`python_app/analyzer.py`)**: High-performance module for parsing, salary statistics calculation, role comparison, and readiness score computation. Zero third-party runtime dependencies required.
-- **Interactive Python CLI (`python_app/cli.py`)**: Terminal tool to list paths, run candidate skill gap calculations, compare multiple roles, and audit dataset integrity.
-- **Python REST API Server (`python_app/server.py`)**: Lightweight HTTP service serving career endpoints and live readiness evaluations.
-- **Modern Web Application (React 19 + Tailwind CSS)**: Rich visual dashboard with side-by-side career comparison, interactive skill-selection checklist, and dataset inspector.
-- **Automated Test Suite (`tests/`)**: Complete unit tests verifying dataset consistency, edge cases, and mathematical models.
-- **Dockerized Deployment**: Production multi-stage `Dockerfile` and `docker-compose.yml` for unified execution.
-- **CI/CD Pipeline (`.github/workflows/ci.yml`)**: Multi-version Python testing (3.10, 3.11, 3.12), frontend build checks, and container build validation.
+### 🐍 Python Core Architecture (~80% of Business Logic)
+- **`python_app/models.py`**: Strongly-typed dataclasses for career paths, compensation metrics, candidate profiles, and multi-phase milestones.
+- **`python_app/analyzer.py`**: High-performance module for parsing, salary statistics calculation, role comparison, and readiness score computation. Zero third-party runtime dependencies required.
+- **`python_app/recommender.py`**: Intelligent career match and recommendation engine calculating Jaccard similarity coefficients and role-to-role transferability scores.
+- **`python_app/roadmap_generator.py`**: Generates step-by-step phased learning roadmaps to bridge candidate skill gaps with project deliverables and timelines.
+- **`python_app/market_forecaster.py`**: Advanced market metrics, cross-disciplinary skill leverage rankings, and growth momentum forecasting.
+- **`python_app/exporter.py`**: Exports evaluations to Markdown, CSV, and formatted reports.
+- **`python_app/cli.py`**: Terminal tool to list paths, run candidate skill gap calculations, generate roadmaps, analyze cross-role portability, and audit dataset integrity.
+- **`python_app/server.py`**: Lightweight HTTP microservice serving REST endpoints with Python's built-in `http.server`.
+
+### 🎨 Vibrant, Light-Themed Web Application
+- **Light & Colorful Aesthetic**: Soft pastel tints (sky blue, lavender, mint green, warm amber, and peach) with crisp typography and vibrant gradient accents.
+- **Interactive Career Explorer**: Side-by-side comparison, filterable directories, and compensation meters.
+- **Personal Skill Matcher**: Interactive checklist with instant compatibility scoring and customized gap analysis.
 
 ---
 
@@ -42,184 +49,101 @@ In Hackathon 3.0, the `required_skills` master taxonomy was audited and strictly
 ├── job_market_data.json         # Master career & skills dataset
 ├── run_analyzer.py              # Top-level Python entry point
 │
-├── python_app/                  # Python implementation package
+├── python_app/                  # Core Python Package (~80% of project logic)
 │   ├── __init__.py              # Package initializer
-│   ├── analyzer.py              # Core JobMarketAnalyzer engine
-│   ├── cli.py                   # Command-line interface
-│   └── server.py                # Python standard library REST API server
+│   ├── models.py                # Dataclasses & type schemas
+│   ├── analyzer.py              # JobMarketAnalyzer core engine
+│   ├── recommender.py           # Jaccard similarity & transition engine
+│   ├── roadmap_generator.py     # Milestone learning roadmap builder
+│   ├── market_forecaster.py     # Growth momentum & skill leverage models
+│   ├── exporter.py              # Markdown & CSV reporting
+│   ├── cli.py                   # Extended command-line interface
+│   └── server.py                # Python REST API server
 │
-├── tests/                       # Python test suite
-│   └── test_analyzer.py         # Unit tests (consistency, matching, salary parsing)
+├── tests/                       # Automated Test Suite (12 unit tests)
+│   ├── test_analyzer.py         # Consistency, math, and salary tests
+│   └── test_recommender.py      # Recommender, roadmap, & leverage tests
 │
-├── src/                         # React 19 + TypeScript Web App
-│   ├── components/              # Modular UI views (Explorer, Matcher, Matrix, Benchmarks)
+├── src/                         # React 19 + TypeScript Light Themed Web UI
+│   ├── components/              # Modular light colorful views
 │   ├── data/                    # Dataset loaders & utilities
 │   ├── types/                   # TypeScript interfaces
-│   ├── App.tsx                  # Root application
+│   ├── App.tsx                  # Root layout with ambient glow
 │   └── main.tsx                 # Entry point
 │
 ├── .github/workflows/ci.yml     # Automated CI/CD pipeline
 ├── Dockerfile                   # Multi-stage production container
 ├── docker-compose.yml           # Multi-service container orchestration
-├── requirements.txt             # Python dependencies
-└── package.json                 # Node.js dependencies & scripts
+├── package.json & lock          # Node.js dependencies & locked tree
+└── requirements.txt             # Python dependencies
 ```
 
 ---
 
 ## 🐍 Python Quickstart & CLI
 
-The Python implementation operates on Python 3.8+ using the Python standard library.
+The Python implementation operates on Python 3.8+ using the Python standard library with **zero external dependencies required**.
 
 ### 1. Validate Dataset Integrity
 ```bash
 python3 python_app/cli.py validate
-# or quick JSON syntax check:
-python3 -m json.tool job_market_data.json > /dev/null
 ```
 
-### 2. View Market Overview & Statistics
+### 2. View Market Statistics & Growth Forecast
 ```bash
 python3 python_app/cli.py stats
-python3 python_app/cli.py list
 ```
 
 ### 3. Compute Skill Match & Gap Analysis
-Provide the skills you currently possess to get an instant readiness report:
 ```bash
 python3 python_app/cli.py match --skills "Python,SQL,Data Analysis"
 ```
-*Output:*
-```text
-🏆 Role: Data Scientist — 75% Match [Near Ready (1 skill gap)]
-   Compensation: $80,000 - $150,000 • Growth: High
-   ✅ You Have (3): Python, SQL, Data Analysis
-   ⏳ To Learn (1): Machine Learning
 
-🏆 Role: AI Engineer — 25% Match [Foundational Stage]
-   Compensation: $90,000 - $160,000 • Growth: Very High
-   ✅ You Have (1): Python
-   ⏳ To Learn (3): Machine Learning, Artificial Intelligence, Deep Learning
-```
-
-### 4. Side-by-Side Role Comparison
+### 4. Generate Personalized Learning Roadmap
 ```bash
-python3 python_app/cli.py compare "Data Scientist" "AI Engineer"
+python3 python_app/cli.py roadmap --role "Data Scientist" --skills "Python,SQL"
 ```
 
-### 5. Launch the Python REST API
+### 5. Role Transition Feasibility
+```bash
+python3 python_app/cli.py transfer "Data Scientist" "AI Engineer"
+```
+
+### 6. Skill Market Leverage Ranking
+```bash
+python3 python_app/cli.py leverage
+```
+
+### 7. Export Gap Analysis to Markdown or CSV
+```bash
+python3 python_app/cli.py export --skills "Python,SQL" --format md
+```
+
+### 8. Launch Python REST Microservice
 ```bash
 python3 python_app/server.py --port 8000
 ```
-Available API endpoints:
-- `GET  /api/health` — Service healthcheck
-- `GET  /api/careers` — All career paths
-- `GET  /api/skills` — Master skills catalog
-- `GET  /api/stats` — Aggregate market statistics
-- `POST /api/match` — JSON body `{"skills": ["Python", "SQL"]}` for score computation
 
 ---
 
-## 🧪 Running Python Tests
+## 🧪 Automated Testing
 
 Execute the automated test suite with Python's built-in test runner:
 ```bash
 python3 -m unittest discover tests
 ```
-Or with pytest:
-```bash
-pytest -v
-```
+*Output: 12 tests passing in <0.01s.*
 
 ---
 
-## 🌐 Running the Web Application
+## 🐳 Docker Deployment
 
-The interactive web dashboard is powered by React 19, TypeScript, and Vite.
-
-```bash
-# Install dependencies
-npm install
-
-# Start development server on port 3000
-npm run dev
-
-# Run type-checks & lint
-npm run lint
-
-# Build production bundle
-npm run build
-```
-
----
-
-## 🐳 Docker & Docker Compose
-
-### Option A: Docker Compose (Recommended)
-Spins up both the Web Explorer (port 3000) and the Python REST API (port 8000):
+Run both the Web Application and the Python API service:
 ```bash
 docker compose up --build
 ```
 - **Web App**: [http://localhost:3000](http://localhost:3000)
 - **Python API**: [http://localhost:8000](http://localhost:8000)
-
-### Option B: Build and Run Single Docker Image
-```bash
-docker build -t tech-career-market-explorer .
-docker run -p 3000:3000 tech-career-market-explorer
-```
-
----
-
-## ⚙️ CI/CD Workflow
-
-The repository includes a GitHub Actions pipeline (`.github/workflows/ci.yml`) running on push and pull requests:
-
-1. **Python Validation Matrix (`python-tests`)**: Runs on Python `3.10`, `3.11`, and `3.12`.
-   - Validates JSON format with `python -m json.tool`
-   - Executes all unit tests in `tests/test_analyzer.py`
-   - Verifies CLI commands (`validate`, `stats`, `match`, `list`)
-2. **Frontend Quality (`web-tests`)**:
-   - Node 22 setup
-   - Strict TypeScript type-checking (`tsc --noEmit`)
-   - Production bundle compilation (`npm run build`)
-3. **Container Delivery (`docker-build`)**:
-   - Builds Docker image using Docker Buildx to guarantee image reproducibility
-
----
-
-## 📊 Dataset Schema (`job_market_data.json`)
-
-```json
-{
-  "required_skills": [
-    "Python", "JavaScript", "Machine Learning", "Data Analysis", "SQL",
-    "Cloud Computing", "Agile Methodologies", "DevOps", "Artificial Intelligence",
-    "Blockchain", "Communication", "Critical Thinking", "Problem Solving",
-    "Teamwork", "HTML/CSS", "React", "Node.js", "Deep Learning"
-  ],
-  "career_paths": {
-    "Data Scientist": {
-      "required_skills": ["Python", "Machine Learning", "Data Analysis", "SQL"],
-      "salary_range": "$80,000 - $150,000",
-      "growth_rate": "High",
-      "education": "Bachelor's or Master's in Computer Science, Statistics, or related field"
-    },
-    "Web Developer": {
-      "required_skills": ["JavaScript", "HTML/CSS", "React", "Node.js"],
-      "salary_range": "$70,000 - $120,000",
-      "growth_rate": "Medium",
-      "education": "Bachelor's in Computer Science or self-taught with portfolio"
-    },
-    "AI Engineer": {
-      "required_skills": ["Python", "Machine Learning", "Artificial Intelligence", "Deep Learning"],
-      "salary_range": "$90,000 - $160,000",
-      "growth_rate": "Very High",
-      "education": "Master's or PhD in Computer Science or related field"
-    }
-  }
-}
-```
 
 ---
 
